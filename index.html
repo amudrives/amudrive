@@ -10,6 +10,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- EmailJS library -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -2751,7 +2754,150 @@
             setupSearch();
             
             // Setup student services
-            setupStudentServices();
+          // ========== FINAL WORKING STUDENT SERVICES WITH EMAILJS ==========
+function setupStudentServices() {
+    // EmailJS initialize - Public Key set
+    emailjs.init('JzTeGNVRI-59wPA2t');  // 👈 Public Key
+    
+    // Contact Form Submit
+    sendMessageBtn.addEventListener('click', function() {
+        const name = document.getElementById('contact-name').value.trim();
+        const email = document.getElementById('contact-email').value.trim();
+        const subject = document.getElementById('contact-subject').value.trim();
+        const message = document.getElementById('contact-message').value.trim();
+        
+        if (!name || !email || !subject || !message) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email address');
+            return;
+        }
+        
+        // Show loading
+        sendMessageBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        sendMessageBtn.disabled = true;
+        
+        // EmailJS se email bhejo
+        emailjs.send(
+            'service_0amnp7t',           // 👈 Service ID
+            'template_sxr651w',           // 👈 Template ID
+            {
+                from_name: name,
+                from_email: email,
+                subject: subject,
+                message: message,
+                to_email: 'amudrives@gmail.com',
+                reply_to: email
+            }
+        ).then(function(response) {
+            console.log('Success:', response);
+            
+            // Success message show
+            contactEmailDisplay.textContent = email;
+            contactSuccess.classList.add('show');
+            
+            // Form clear
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-subject').value = '';
+            document.getElementById('contact-message').value = '';
+            
+            // Button reset
+            sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+            sendMessageBtn.disabled = false;
+            
+            // 5 sec baad success message hide
+            setTimeout(() => contactSuccess.classList.remove('show'), 5000);
+            
+        }, function(error) {
+            console.error('Error:', error);
+            alert('Failed to send. Please try again or email directly at amudrives@gmail.com');
+            
+            // Button reset
+            sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+            sendMessageBtn.disabled = false;
+        });
+    });
+    
+    // Request Materials Form Submit
+    submitRequestBtn.addEventListener('click', function() {
+        const course = document.getElementById('request-course').value.trim();
+        const type = document.getElementById('request-type').value;
+        const name = document.getElementById('requester-name').value.trim();
+        const email = document.getElementById('requester-email').value.trim();
+        const description = document.getElementById('request-description').value.trim();
+        
+        if (!course || !type || !name || !email || !description) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email address');
+            return;
+        }
+        
+        const materialTypeText = getMaterialTypeText(type);
+        
+        // Show loading
+        submitRequestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitRequestBtn.disabled = true;
+        
+        emailjs.send(
+            'service_0amnp7t',           // 👈 Service ID
+            'template_sxr651w',           // 👈 Template ID
+            {
+                from_name: name,
+                from_email: email,
+                subject: `Material Request: ${course}`,
+                message: `Course: ${course}\nMaterial Type: ${materialTypeText}\n\nDetailed Request:\n${description}`,
+                to_email: 'amudrives@gmail.com',
+                reply_to: email
+            }
+        ).then(function(response) {
+            console.log('Success:', response);
+            
+            // Success message
+            requestEmailDisplay.textContent = email;
+            requestSuccess.classList.add('show');
+            
+            // Form clear
+            document.getElementById('request-course').value = '';
+            document.getElementById('request-type').value = '';
+            document.getElementById('requester-name').value = '';
+            document.getElementById('requester-email').value = '';
+            document.getElementById('request-description').value = '';
+            
+            // Button reset
+            submitRequestBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+            submitRequestBtn.disabled = false;
+            
+            setTimeout(() => requestSuccess.classList.remove('show'), 5000);
+            
+        }, function(error) {
+            console.error('Error:', error);
+            alert('Failed to send. Please try again or email directly at amudrives@gmail.com');
+            
+            // Button reset
+            submitRequestBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+            submitRequestBtn.disabled = false;
+        });
+    });
+}
+
+// Helper function (yeh tumhare code mein already hai, but duplicate na ho isliye check kar lena)
+function getMaterialTypeText(type) {
+    switch(type) {
+        case 'qp': return 'Previous Year Question Paper';
+        case 'notes': return 'Study Notes';
+        case 'lab': return 'Lab Manual';
+        case 'syllabus': return 'Syllabus';
+        default: return type;
+    }
+}
             
             // Setup logout link
             logoutLink.addEventListener('click', function(e) {
