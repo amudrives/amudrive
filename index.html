@@ -2708,6 +2708,12 @@
         
         const loginError = document.getElementById('login-error');
 
+        // ========== FIX: validateEmail function SABSE PEHLE define karo ==========
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
         // ========== AUTH STATE OBSERVER ==========
         auth.onAuthStateChanged((user) => {
             if (user) {
