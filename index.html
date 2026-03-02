@@ -105,6 +105,26 @@
             }
         }
         
+        /* Mobile view order: Slider (in main-content) → Quick Panel (left-panel) → About (in main-content) */
+        @media (max-width: 1099px) {
+            .container {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            .left-panel {
+                order: 2;
+            }
+            
+            .about-section {
+                order: 3;
+            }
+        }
+        
         /* ========== DARK MODE TOGGLE IN NAVBAR ========== */
         .dark-mode-nav {
             position: relative;
@@ -247,6 +267,35 @@
             margin-left: auto;
             font-size: 0.8rem;
             color: var(--secondary-color);
+        }
+
+        .share-pyq-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 12px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #002147, #004080);
+            border-radius: 6px;
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid #b22222;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-pyq-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #004080, #002147);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .share-pyq-btn i {
+            font-size: 1.2rem;
         }
 
         .section {
@@ -498,6 +547,14 @@
             opacity: 0.9;
         }
         
+        .logo img {
+            max-width: 60px;
+            height: auto;
+            border-radius: 50%; /* CIRCLE LOGO */
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+        
         .raging-notice {
             background-color: #b22222;
             color: white;
@@ -709,6 +766,7 @@
         .member-photo-container {
             height: 220px;
             overflow: hidden;
+            aspect-ratio: 3/4; /* 3:4 RATIO FOR TEAM PHOTOS */
         }
         
         .member-photo {
@@ -746,6 +804,116 @@
             font-size: 0.9rem;
             line-height: 1.6;
             color: var(--text-color);
+        }
+        
+        /* ========== ACCORDION STYLES FOR COURSES ========== */
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .course-box {
+            background-color: var(--hover-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .course-box:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .course-header {
+            background-color: #002147;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .course-header:hover {
+            background-color: #004080;
+        }
+        
+        .course-header h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .course-header .code {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .course-header .accordion-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .course-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .materials-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--panel-bg);
+        }
+        
+        .materials-list.show {
+            max-height: 500px; /* Large enough for content */
+            overflow-y: auto;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .materials-list ul {
+            list-style: none;
+            padding: 15px;
+        }
+        
+        .materials-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .materials-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .materials-list a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .materials-list a:hover {
+            text-decoration: underline;
+        }
+        
+        .download-btn {
+            background-color: #002147;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .download-btn:hover {
+            background-color: #004080;
         }
         
         /* ========== STUDENT SERVICES PAGE ========== */
@@ -1140,89 +1308,6 @@
             border-color: #004080;
         }
         
-        .course-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .course-box {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #eee;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .course-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .course-header {
-            background-color: #002147;
-            color: white;
-            padding: 15px;
-        }
-        
-        .course-header h3 {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        
-        .course-header .code {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .materials-list {
-            padding: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .materials-list ul {
-            list-style: none;
-        }
-        
-        .materials-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .materials-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .materials-list a {
-            color: #002147;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .materials-list a:hover {
-            text-decoration: underline;
-        }
-        
-        .download-btn {
-            background-color: #002147;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .download-btn:hover {
-            background-color: #004080;
-        }
-        
         footer {
             background-color: #002147;
             color: white;
@@ -1590,6 +1675,10 @@
             background-color: var(--primary-color);
         }
         
+        .dark-mode .course-header:hover {
+            background-color: var(--secondary-color);
+        }
+        
         .dark-mode .materials-list a {
             color: var(--primary-color);
         }
@@ -1688,12 +1777,7 @@
         <div class="header-container">
             <div class="logo-container">
                 <div class="logo">
-                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="60" height="60" fill="#002147"/>
-                        <circle cx="30" cy="20" r="10" fill="white"/>
-                        <path d="M20 40 L30 50 L40 40 Z" fill="white"/>
-                        <text x="30" y="58" text-anchor="middle" fill="white" font-size="8" font-weight="bold">AMU</text>
-                    </svg>
+                    <img src="https://res.cloudinary.com/dizkjy9ok/image/upload/v1772439941/ChatGPT_Image_Feb_16_2026_03_04_40_PM_h0ufst.png" alt="AMU DRIVE Logo">
                 </div>
                 <div class="logo-text">
                     <h1>AMU DRIVE</h1>
@@ -2043,7 +2127,7 @@
                     <button class="level-tab" data-level="phd">Ph.D. Courses</button>
                 </div>
                 <div class="course-list" id="courses-list">
-                    <!-- Course boxes will be loaded here dynamically -->
+                    <!-- Course boxes will be loaded here dynamically with accordion functionality -->
                 </div>
             </div>
             
@@ -2063,7 +2147,6 @@
                     <button class="admin-tab-btn" id="add-social-links-btn">Add Social Links</button>
                     <button class="admin-tab-btn" id="add-important-download-btn">Add Important Download</button>
                     <button class="admin-tab-btn" id="add-upi-btn">Add UPI Details</button>
-                    <!-- NEW: Delete Course Button in Admin Tabs -->
                     <button class="admin-tab-btn" id="delete-course-btn-tab">Delete Course</button>
                     <button class="btn btn-danger" id="logout-admin">Logout</button>
                 </div>
@@ -2327,7 +2410,7 @@
                     <button class="btn btn-danger" id="remove-upi" style="margin-left: 10px;">Remove UPI Details</button>
                 </div>
                 
-                <!-- NEW: Delete Course Form -->
+                <!-- Delete Course Form -->
                 <div id="delete-course-form" style="display: none; margin-top: 30px;" class="important-downloads-form">
                     <h3>Delete Course</h3>
                     <div class="form-group">
@@ -2371,6 +2454,13 @@
                     Quick Panel
                 </div>
             </div>
+
+            <!-- SHARE PYQs WITH US Button -->
+            <a href="https://forms.gle/Q4onQTyy65FPKgGw7" class="share-pyq-btn" target="_blank" onclick="openAnyLink('https://forms.gle/Q4onQTyy65FPKgGw7'); return false;">
+                <i class="fas fa-share-alt"></i>
+                SHARE PYQs WITH US
+                <i class="fas fa-external-link-alt"></i>
+            </a>
 
             <!-- Social Channels Section -->
             <div class="social-channels-section">
@@ -2553,6 +2643,33 @@
             }
         }
         
+        // ========== ACCORDION FUNCTIONALITY ==========
+        function setupAccordion() {
+            const courseHeaders = document.querySelectorAll('.course-header');
+            
+            courseHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Close other open accordions
+                    courseHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            const otherMaterials = otherHeader.nextElementSibling;
+                            if (otherMaterials) {
+                                otherMaterials.classList.remove('show');
+                            }
+                        }
+                    });
+                    
+                    // Toggle current accordion
+                    this.classList.toggle('active');
+                    const materialsList = this.nextElementSibling;
+                    if (materialsList) {
+                        materialsList.classList.toggle('show');
+                    }
+                });
+            });
+        }
+        
         // ========== DARK MODE TOGGLE ==========
         const darkModeToggleNav = document.getElementById('darkModeToggleNav');
         const body = document.body;
@@ -2635,7 +2752,6 @@
         const addSocialLinksBtn = document.getElementById('add-social-links-btn');
         const addImportantDownloadBtn = document.getElementById('add-important-download-btn');
         const addUpiBtn = document.getElementById('add-upi-btn');
-        // NEW: Delete Course Tab Button
         const deleteCourseBtnTab = document.getElementById('delete-course-btn-tab');
         
         const addCourseForm = document.getElementById('add-course-form');
@@ -2648,7 +2764,6 @@
         const addSocialLinksForm = document.getElementById('add-social-links-form');
         const addImportantDownloadForm = document.getElementById('add-important-download-form');
         const addUpiForm = document.getElementById('add-upi-form');
-        // NEW: Delete Course Form
         const deleteCourseForm = document.getElementById('delete-course-form');
         
         const submitCourseBtn = document.getElementById('submit-course');
@@ -2760,154 +2875,7 @@
             setupSearch();
             
             // Setup student services
-          // ========== FINAL WORKING STUDENT SERVICES WITH EMAILJS ==========
-function setupStudentServices() {
-    // EmailJS initialize - Public Key set
-    emailjs.init('JzTeGNVRI-59wPA2t');  // 👈 Public Key
-    
-    // Contact Form Submit
-    sendMessageBtn.addEventListener('click', function() {
-        const name = document.getElementById('contact-name').value.trim();
-        const email = document.getElementById('contact-email').value.trim();
-        const subject = document.getElementById('contact-subject').value.trim();
-        const message = document.getElementById('contact-message').value.trim();
-        
-        if (!name || !email || !subject || !message) {
-            alert('Please fill in all fields');
-            return;
-        }
-        
-        if (!validateEmail(email)) {
-            alert('Please enter a valid email address');
-            return;
-        }
-        
-        // Show loading
-        sendMessageBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        sendMessageBtn.disabled = true;
-        
-        // EmailJS se email bhejo
-        emailjs.send(
-            'service_0amnp7t',           // 👈 Service ID
-            'template_sxr651w',           // 👈 Template ID
-            {
-                from_name: name,
-                from_email: email,
-                subject: subject,
-                message: message,
-                to_email: 'amudrives@gmail.com',
-                reply_to: email
-            }
-        ).then(function(response) {
-            console.log('Success:', response);
-            
-            // Success message show
-            contactEmailDisplay.textContent = email;
-            contactSuccess.classList.add('show');
-            
-            // Form clear
-            document.getElementById('contact-name').value = '';
-            document.getElementById('contact-email').value = '';
-            document.getElementById('contact-subject').value = '';
-            document.getElementById('contact-message').value = '';
-            
-            // Button reset
-            sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-            sendMessageBtn.disabled = false;
-            
-            // 5 sec baad success message hide
-            setTimeout(() => contactSuccess.classList.remove('show'), 5000);
-            
-        }, function(error) {
-            console.error('Error:', error);
-            alert('Failed to send. Please try again or email directly at amudrives@gmail.com');
-            
-            // Button reset
-            sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-            sendMessageBtn.disabled = false;
-        });
-    });
-    
-    // Request Materials Form Submit
-    submitRequestBtn.addEventListener('click', function() {
-        const course = document.getElementById('request-course').value.trim();
-        const type = document.getElementById('request-type').value;
-        const name = document.getElementById('requester-name').value.trim();
-        const email = document.getElementById('requester-email').value.trim();
-        const description = document.getElementById('request-description').value.trim();
-        
-        if (!course || !type || !name || !email || !description) {
-            alert('Please fill in all fields');
-            return;
-        }
-        
-        if (!validateEmail(email)) {
-            alert('Please enter a valid email address');
-            return;
-        }
-        
-        const materialTypeText = getMaterialTypeText(type);
-        
-        // Show loading
-        submitRequestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        submitRequestBtn.disabled = true;
-        
-        emailjs.send(
-            'service_0amnp7t',           // 👈 Service ID
-            'template_sxr651w',           // 👈 Template ID
-            {
-                from_name: name,
-                from_email: email,
-                subject: `Material Request: ${course}`,
-                message: `Course: ${course}\nMaterial Type: ${materialTypeText}\n\nDetailed Request:\n${description}`,
-                to_email: 'amudrives@gmail.com',
-                reply_to: email
-            }
-        ).then(function(response) {
-            console.log('Success:', response);
-            
-            // Success message
-            requestEmailDisplay.textContent = email;
-            requestSuccess.classList.add('show');
-            
-            // Form clear
-            document.getElementById('request-course').value = '';
-            document.getElementById('request-type').value = '';
-            document.getElementById('requester-name').value = '';
-            document.getElementById('requester-email').value = '';
-            document.getElementById('request-description').value = '';
-            
-            // Button reset
-            submitRequestBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
-            submitRequestBtn.disabled = false;
-            
-            setTimeout(() => requestSuccess.classList.remove('show'), 5000);
-            
-        }, function(error) {
-            console.error('Error:', error);
-            alert('Failed to send. Please try again or email directly at amudrives@gmail.com');
-            
-            // Button reset
-            submitRequestBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
-            submitRequestBtn.disabled = false;
-        });
-    });
-}
-// ⭐⭐⭐ YEH EK LINE ADD KARO ⭐⭐⭐
-setupStudentServices();
-            
-// Helper function (yeh tumhare code mein already hai, but duplicate na ho isliye check kar lena)
-function getMaterialTypeText(type) {
-    switch(type) {
-        case 'qp': return 'Previous Year Question Paper';
-        case 'notes': return 'Study Notes';
-        case 'lab': return 'Lab Manual';
-        case 'syllabus': return 'Syllabus';
-        default: return type;
-    }
-}
-            
-            
+            setupStudentServices();
             
             // Setup logout link
             logoutLink.addEventListener('click', function(e) {
@@ -2915,6 +2883,150 @@ function getMaterialTypeText(type) {
                 logout();
             });
         });
+
+        // ========== STUDENT SERVICES WITH EMAILJS ==========
+        function setupStudentServices() {
+            // EmailJS initialize - Public Key set
+            emailjs.init('JzTeGNVRI-59wPA2t');
+            
+            // Contact Form Submit
+            sendMessageBtn.addEventListener('click', function() {
+                const name = document.getElementById('contact-name').value.trim();
+                const email = document.getElementById('contact-email').value.trim();
+                const subject = document.getElementById('contact-subject').value.trim();
+                const message = document.getElementById('contact-message').value.trim();
+                
+                if (!name || !email || !subject || !message) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                if (!validateEmail(email)) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                // Show loading
+                sendMessageBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                sendMessageBtn.disabled = true;
+                
+                // EmailJS se email bhejo
+                emailjs.send(
+                    'service_0amnp7t',
+                    'template_sxr651w',
+                    {
+                        from_name: name,
+                        from_email: email,
+                        subject: subject,
+                        message: message,
+                        to_email: 'amudrives@gmail.com',
+                        reply_to: email
+                    }
+                ).then(function(response) {
+                    console.log('Success:', response);
+                    
+                    // Success message show
+                    contactEmailDisplay.textContent = email;
+                    contactSuccess.classList.add('show');
+                    
+                    // Form clear
+                    document.getElementById('contact-name').value = '';
+                    document.getElementById('contact-email').value = '';
+                    document.getElementById('contact-subject').value = '';
+                    document.getElementById('contact-message').value = '';
+                    
+                    // Button reset
+                    sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                    sendMessageBtn.disabled = false;
+                    
+                    // 5 sec baad success message hide
+                    setTimeout(() => contactSuccess.classList.remove('show'), 5000);
+                    
+                }, function(error) {
+                    console.error('Error:', error);
+                    alert('Failed to send. Please try again or email directly at amudrives@gmail.com');
+                    
+                    // Button reset
+                    sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                    sendMessageBtn.disabled = false;
+                });
+            });
+            
+            // Request Materials Form Submit
+            submitRequestBtn.addEventListener('click', function() {
+                const course = document.getElementById('request-course').value.trim();
+                const type = document.getElementById('request-type').value;
+                const name = document.getElementById('requester-name').value.trim();
+                const email = document.getElementById('requester-email').value.trim();
+                const description = document.getElementById('request-description').value.trim();
+                
+                if (!course || !type || !name || !email || !description) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                if (!validateEmail(email)) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                const materialTypeText = getMaterialTypeText(type);
+                
+                // Show loading
+                submitRequestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitRequestBtn.disabled = true;
+                
+                emailjs.send(
+                    'service_0amnp7t',
+                    'template_sxr651w',
+                    {
+                        from_name: name,
+                        from_email: email,
+                        subject: `Material Request: ${course}`,
+                        message: `Course: ${course}\nMaterial Type: ${materialTypeText}\n\nDetailed Request:\n${description}`,
+                        to_email: 'amudrives@gmail.com',
+                        reply_to: email
+                    }
+                ).then(function(response) {
+                    console.log('Success:', response);
+                    
+                    // Success message
+                    requestEmailDisplay.textContent = email;
+                    requestSuccess.classList.add('show');
+                    
+                    // Form clear
+                    document.getElementById('request-course').value = '';
+                    document.getElementById('request-type').value = '';
+                    document.getElementById('requester-name').value = '';
+                    document.getElementById('requester-email').value = '';
+                    document.getElementById('request-description').value = '';
+                    
+                    // Button reset
+                    submitRequestBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+                    submitRequestBtn.disabled = false;
+                    
+                    setTimeout(() => requestSuccess.classList.remove('show'), 5000);
+                    
+                }, function(error) {
+                    console.error('Error:', error);
+                    alert('Failed to send. Please try again or email directly at amudrives@gmail.com');
+                    
+                    // Button reset
+                    submitRequestBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+                    submitRequestBtn.disabled = false;
+                });
+            });
+        }
+
+        function getMaterialTypeText(type) {
+            switch(type) {
+                case 'qp': return 'Previous Year Question Paper';
+                case 'notes': return 'Study Notes';
+                case 'lab': return 'Lab Manual';
+                case 'syllabus': return 'Syllabus';
+                default: return type;
+            }
+        }
 
         // ========== LOAD ALL DATA FROM FIRESTORE ==========
         async function loadAllData() {
@@ -3220,7 +3332,7 @@ function getMaterialTypeText(type) {
             noticeModal.style.display = 'flex';
         }
 
-        // ========== COURSES DISPLAY ==========
+        // ========== COURSES DISPLAY WITH ACCORDION ==========
         function loadCourses(type, level, searchTerm = '') {
             coursesList.innerHTML = '';
             
@@ -3241,44 +3353,54 @@ function getMaterialTypeText(type) {
                 return;
             }
             
-            filteredCourses.forEach(course => {
+            filteredCourses.forEach((course, index) => {
                 const courseBox = document.createElement('div');
                 courseBox.className = 'course-box';
                 
                 let materialsHTML = '';
                 
-                course.materials.forEach(material => {
-                    const safeLink = material.link.replace(/'/g, "\\'");
-                    const safeTitle = material.title.replace(/'/g, "\\'");
-                    
-                    materialsHTML += `
-                        <li>
-                            <div>
-                                <span style="cursor: pointer; color: #002147; font-weight: 500;" 
-                                      onclick="openAnyLink('${safeLink}')">
-                                    📄 ${material.title}
-                                </span>
-                            </div>
-                            <button class="download-btn" 
-                                    onclick="openAnyLink('${safeLink}')">
-                                Open
-                            </button>
-                        </li>
-                    `;
-                });
+                if (course.materials && course.materials.length > 0) {
+                    course.materials.forEach(material => {
+                        const safeLink = material.link.replace(/'/g, "\\'");
+                        const safeTitle = material.title.replace(/'/g, "\\'");
+                        
+                        materialsHTML += `
+                            <li>
+                                <div>
+                                    <span style="cursor: pointer; color: #002147; font-weight: 500;" 
+                                          onclick="openAnyLink('${safeLink}')">
+                                        📄 ${material.title}
+                                    </span>
+                                </div>
+                                <button class="download-btn" 
+                                        onclick="openAnyLink('${safeLink}')">
+                                    Open
+                                </button>
+                            </li>
+                        `;
+                    });
+                } else {
+                    materialsHTML = '<li style="color: #666; justify-content: center;">No materials added yet.</li>';
+                }
                 
                 courseBox.innerHTML = `
-                    <div class="course-header">
-                        <h3>${course.name}</h3>
-                        <div class="code">${course.code}</div>
+                    <div class="course-header" data-course-index="${index}">
+                        <div>
+                            <h3>${course.name}</h3>
+                            <div class="code">${course.code}</div>
+                        </div>
+                        <i class="fas fa-chevron-down accordion-icon"></i>
                     </div>
                     <div class="materials-list">
-                        <ul>${materialsHTML || '<li style="color: #666;">No materials added yet.</li>'}</ul>
+                        <ul>${materialsHTML}</ul>
                     </div>
                 `;
                 
                 coursesList.appendChild(courseBox);
             });
+            
+            // Setup accordion after loading courses
+            setTimeout(setupAccordion, 100);
         }
 
         function filterCourses(searchTerm) {
@@ -3589,7 +3711,6 @@ function getMaterialTypeText(type) {
                 { btn: addSocialLinksBtn, form: addSocialLinksForm },
                 { btn: addImportantDownloadBtn, form: addImportantDownloadForm },
                 { btn: addUpiBtn, form: addUpiForm },
-                // NEW: Add Delete Course Tab
                 { btn: deleteCourseBtnTab, form: deleteCourseForm }
             ];
             
@@ -3648,7 +3769,7 @@ function getMaterialTypeText(type) {
                         updateTeamMemberSelect();
                     }
                     
-                    // NEW: Load courses for delete dropdown when delete tab is clicked
+                    // Load courses for delete dropdown when delete tab is clicked
                     if (tab.btn === deleteCourseBtnTab) {
                         loadDeleteCourseDropdowns();
                     }
@@ -4068,7 +4189,7 @@ function getMaterialTypeText(type) {
             const deleteSelectedBtn = document.getElementById('delete-selected-member');
             deleteSelectedBtn.addEventListener('click', deleteSelectedTeamMember);
             
-            // NEW: Delete Course Functionality
+            // Delete Course Functionality
             async function loadDeleteCourseDropdowns() {
                 const deleteSelectCourse = document.getElementById('delete-select-course');
                 deleteSelectCourse.innerHTML = '<option value="">-- Select Course --</option>';
