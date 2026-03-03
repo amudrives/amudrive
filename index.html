@@ -105,25 +105,7 @@
             }
         }
         
-        /* Mobile view order: Slider (in main-content) → Quick Panel (left-panel) → About (in main-content) */
-        @media (max-width: 1099px) {
-            .container {
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .main-content {
-                order: 1;
-            }
-            
-            .left-panel {
-                order: 2;
-            }
-            
-            .about-section {
-                order: 3;
-            }
-        }
+       
         
         /* ========== DARK MODE TOGGLE IN NAVBAR ========== */
         .dark-mode-nav {
@@ -4633,5 +4615,25 @@
             }
         };
     </script>
+    <script>
+function fixMobileOrder() {
+    const container = document.querySelector(".container");
+    const leftPanel = document.querySelector(".left-panel");
+    const slider = document.querySelector(".slider-container");
+
+    if (window.innerWidth <= 1099) {
+        if (slider && leftPanel) {
+            slider.after(leftPanel);
+        }
+    } else {
+        if (container && leftPanel) {
+            container.appendChild(leftPanel);
+        }
+    }
+}
+
+window.addEventListener("load", fixMobileOrder);
+window.addEventListener("resize", fixMobileOrder);
+</script>
 </body>
 </html>
