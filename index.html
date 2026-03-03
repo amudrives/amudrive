@@ -1432,6 +1432,15 @@
             background-color: #218838;
         }
         
+        .btn-warning {
+            background-color: #ffc107;
+            color: #000;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
         .important-downloads-form {
             background-color: white;
             padding: 20px;
@@ -2129,7 +2138,7 @@
                     <button class="admin-tab-btn" id="add-social-links-btn">Add Social Links</button>
                     <button class="admin-tab-btn" id="add-important-download-btn">Add Important Download</button>
                     <button class="admin-tab-btn" id="add-upi-btn">Add UPI Details</button>
-                    <button class="admin-tab-btn" id="delete-course-btn-tab">Delete Course</button>
+                    <button class="admin-tab-btn" id="delete-course-btn-tab">Delete/Edit Course</button>
                     <button class="btn btn-danger" id="logout-admin">Logout</button>
                 </div>
                 
@@ -2392,37 +2401,89 @@
                     <button class="btn btn-danger" id="remove-upi" style="margin-left: 10px;">Remove UPI Details</button>
                 </div>
                 
-                <!-- Delete Course Form -->
+                <!-- Delete/Edit Course Form -->
                 <div id="delete-course-form" style="display: none; margin-top: 30px;" class="important-downloads-form">
-                    <h3>Delete Course</h3>
-                    <div class="form-group">
-                        <label for="delete-course-category">Select Category</label>
-                        <select id="delete-course-category">
-                            <option value="qp">Question Papers</option>
-                            <option value="sm">Study Materials</option>
-                            <option value="sem">Semester Question Paper</option>
-                        </select>
+                    <h3>Delete or Edit Course</h3>
+                    
+                    <!-- Delete Course Section -->
+                    <div style="border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
+                        <h4>Delete Course</h4>
+                        <div class="form-group">
+                            <label for="delete-course-category">Select Category</label>
+                            <select id="delete-course-category">
+                                <option value="qp">Question Papers</option>
+                                <option value="sm">Study Materials</option>
+                                <option value="sem">Semester Question Paper</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="delete-course-level">Course Level</label>
+                            <select id="delete-course-level">
+                                <option value="school">Schools/Diploma</option>
+                                <option value="ug">Undergraduate (UG)</option>
+                                <option value="pg">Postgraduate (PG)</option>
+                                <option value="phd">Ph.D.</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="delete-select-course">Select Course</label>
+                            <select id="delete-select-course">
+                                <option value="">-- Select Course --</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-danger" id="delete-course-btn">
+                            <i class="fas fa-trash"></i> Delete Selected Course
+                        </button>
+                        <div id="delete-course-warning" style="margin-top: 15px; color: #b22222; font-weight: 500; display: none;">
+                            ⚠️ Warning: This will permanently delete the course and all its materials!
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="delete-course-level">Course Level</label>
-                        <select id="delete-course-level">
-                            <option value="school">Schools/Diploma</option>
-                            <option value="ug">Undergraduate (UG)</option>
-                            <option value="pg">Postgraduate (PG)</option>
-                            <option value="phd">Ph.D.</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="delete-select-course">Select Course</label>
-                        <select id="delete-select-course">
-                            <option value="">-- Select Course --</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-danger" id="delete-course-btn">
-                        <i class="fas fa-trash"></i> Delete Selected Course
-                    </button>
-                    <div id="delete-course-warning" style="margin-top: 15px; color: #b22222; font-weight: 500; display: none;">
-                        ⚠️ Warning: This will permanently delete the course and all its materials!
+                    
+                    <!-- Edit Course Section -->
+                    <div>
+                        <h4>Edit Course Details</h4>
+                        <div class="form-group">
+                            <label for="edit-course-category">Select Category</label>
+                            <select id="edit-course-category">
+                                <option value="qp">Question Papers</option>
+                                <option value="sm">Study Materials</option>
+                                <option value="sem">Semester Question Paper</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-course-level">Course Level</label>
+                            <select id="edit-course-level">
+                                <option value="school">Schools/Diploma</option>
+                                <option value="ug">Undergraduate (UG)</option>
+                                <option value="pg">Postgraduate (PG)</option>
+                                <option value="phd">Ph.D.</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-select-course">Select Course to Edit</label>
+                            <select id="edit-select-course">
+                                <option value="">-- Select Course --</option>
+                            </select>
+                        </div>
+                        
+                        <div id="edit-course-fields" style="display: none; margin-top: 20px; padding: 20px; background-color: var(--hover-color); border-radius: 6px;">
+                            <h5>Edit Course Information</h5>
+                            <div class="form-group">
+                                <label for="edit-course-code">Course Code</label>
+                                <input type="text" id="edit-course-code" placeholder="e.g., S01, B01, M01, P01">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-course-name">Course Name</label>
+                                <input type="text" id="edit-course-name" placeholder="e.g., High School, Diploma, B.A. History, M.Sc. Physics">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-course-description">Course Description</label>
+                                <textarea id="edit-course-description" placeholder="Brief description of the course"></textarea>
+                            </div>
+                            <button class="btn btn-warning" id="update-course-btn">
+                                <i class="fas fa-save"></i> Update Course
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3013,11 +3074,19 @@
         // ========== LOAD ALL DATA FROM FIRESTORE ==========
         async function loadAllData() {
             try {
+                // Reset coursesData
+                coursesData = {
+                    qp: { school: [], ug: [], pg: [], phd: [] },
+                    sm: { school: [], ug: [], pg: [], phd: [] },
+                    sem: { school: [], ug: [], pg: [], phd: [] }
+                };
+                
                 // Load courses and materials
                 const coursesSnapshot = await db.collection('courses').get();
                 coursesSnapshot.forEach(doc => {
                     const data = doc.data();
                     if (coursesData[data.type] && coursesData[data.type][data.level]) {
+                        // Check if course already exists
                         let course = coursesData[data.type][data.level].find(c => c.code === data.code);
                         if (!course) {
                             course = {
@@ -3029,11 +3098,11 @@
                             coursesData[data.type][data.level].push(course);
                         }
                         
+                        // Clear existing materials and add fresh ones
+                        course.materials = [];
                         if (data.materials) {
                             data.materials.forEach(material => {
-                                if (!course.materials.some(m => m.link === material.link)) {
-                                    course.materials.push(material);
-                                }
+                                course.materials.push(material);
                             });
                         }
                     }
@@ -3083,6 +3152,11 @@
 
                 // Load course dropdowns for admin
                 loadCourseDropdowns();
+                
+                // Refresh current view if on courses page
+                if (coursesPage.style.display === 'block') {
+                    loadCourses(currentType, currentLevel);
+                }
 
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -3751,9 +3825,10 @@
                         updateTeamMemberSelect();
                     }
                     
-                    // Load courses for delete dropdown when delete tab is clicked
+                    // Load courses for delete/edit dropdowns when delete tab is clicked
                     if (tab.btn === deleteCourseBtnTab) {
                         loadDeleteCourseDropdowns();
+                        loadEditCourseDropdowns();
                     }
                 });
             });
@@ -4245,6 +4320,101 @@
                     }
                 }
             });
+            
+            // ===== EDIT COURSE FUNCTIONALITY =====
+            async function loadEditCourseDropdowns() {
+                const editSelectCourse = document.getElementById('edit-select-course');
+                editSelectCourse.innerHTML = '<option value="">-- Select Course --</option>';
+                
+                const category = document.getElementById('edit-course-category').value;
+                const level = document.getElementById('edit-course-level').value;
+                
+                try {
+                    const coursesSnapshot = await db.collection('courses')
+                        .where('type', '==', category)
+                        .where('level', '==', level)
+                        .get();
+                    
+                    coursesSnapshot.forEach(doc => {
+                        const course = doc.data();
+                        const option = document.createElement('option');
+                        option.value = doc.id;
+                        option.setAttribute('data-code', course.code);
+                        option.setAttribute('data-name', course.name);
+                        option.setAttribute('data-description', course.description || '');
+                        option.textContent = `${course.code} - ${course.name}`;
+                        editSelectCourse.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error loading courses for edit:', error);
+                }
+            }
+            
+            // Category/Level change for edit
+            document.getElementById('edit-course-category').addEventListener('change', loadEditCourseDropdowns);
+            document.getElementById('edit-course-level').addEventListener('change', loadEditCourseDropdowns);
+            
+            // Load course details when selected
+            document.getElementById('edit-select-course').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const editFields = document.getElementById('edit-course-fields');
+                
+                if (this.value) {
+                    document.getElementById('edit-course-code').value = selectedOption.getAttribute('data-code') || '';
+                    document.getElementById('edit-course-name').value = selectedOption.getAttribute('data-name') || '';
+                    document.getElementById('edit-course-description').value = selectedOption.getAttribute('data-description') || '';
+                    editFields.style.display = 'block';
+                } else {
+                    editFields.style.display = 'none';
+                }
+            });
+            
+            // Update course button click
+            document.getElementById('update-course-btn').addEventListener('click', async function() {
+                if (!currentUser) {
+                    alert('Please log in first');
+                    loginModal.style.display = 'flex';
+                    return;
+                }
+                
+                const courseId = document.getElementById('edit-select-course').value;
+                const code = document.getElementById('edit-course-code').value.trim();
+                const name = document.getElementById('edit-course-name').value.trim();
+                const description = document.getElementById('edit-course-description').value.trim();
+                
+                if (!courseId) {
+                    alert('Please select a course to edit');
+                    return;
+                }
+                
+                if (!code || !name) {
+                    alert('Please fill in Course Code and Course Name');
+                    return;
+                }
+                
+                if (confirm('Are you sure you want to update this course?')) {
+                    try {
+                        await db.collection('courses').doc(courseId).update({
+                            code: code,
+                            name: name,
+                            description: description
+                        });
+                        
+                        alert('Course updated successfully!');
+                        
+                        // Reload data
+                        await loadAllData();
+                        
+                        // Reset form
+                        document.getElementById('edit-select-course').value = '';
+                        document.getElementById('edit-course-fields').style.display = 'none';
+                        
+                    } catch (error) {
+                        console.error('Error updating course:', error);
+                        alert('Error updating course. Please try again.');
+                    }
+                }
+            });
         }
 
         // ========== ADMIN FUNCTIONS ==========
@@ -4315,7 +4485,14 @@
                             materialDiv.innerHTML = `
                                 <p><strong>${material.title}</strong></p>
                                 <p><strong>Link:</strong> <span onclick="openAnyLink('${material.link.replace(/'/g, "\\'")}')" style="color: #002147; cursor: pointer; text-decoration: underline;">${material.link.substring(0, 50)}...</span></p>
-                                <button class="btn btn-danger" onclick="deleteMaterial('${doc.id}', ${index})" style="margin-top: 5px; padding: 5px 10px; font-size: 14px;">Delete</button>
+                                <div style="display: flex; gap: 10px;">
+                                    <button class="btn btn-warning" onclick="editMaterial('${doc.id}', ${index})" style="margin-top: 5px; padding: 5px 10px; font-size: 14px;">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger" onclick="deleteMaterial('${doc.id}', ${index})" style="margin-top: 5px; padding: 5px 10px; font-size: 14px;">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
                             `;
                             materialsList.appendChild(materialDiv);
                         });
@@ -4513,7 +4690,59 @@
             }
         }
 
-        // ========== GLOBAL DELETE FUNCTIONS ==========
+        // ========== GLOBAL DELETE/EDIT FUNCTIONS ==========
+        window.editMaterial = async function(courseId, materialIndex) {
+            if (!currentUser) {
+                alert('Please log in first');
+                return;
+            }
+            
+            try {
+                const courseRef = db.collection('courses').doc(courseId);
+                const courseDoc = await courseRef.get();
+                const courseData = courseDoc.data();
+                
+                const materials = courseData.materials || [];
+                const material = materials[materialIndex];
+                
+                // Prompt for new values
+                const newTitle = prompt('Enter new title for the material:', material.title);
+                if (newTitle === null) return; // Cancel
+                
+                const newLink = prompt('Enter new link for the material:', material.link);
+                if (newLink === null) return; // Cancel
+                
+                if (!newTitle.trim() || !newLink.trim()) {
+                    alert('Title and Link cannot be empty');
+                    return;
+                }
+                
+                // Update material
+                materials[materialIndex] = {
+                    ...material,
+                    title: newTitle.trim(),
+                    link: newLink.trim()
+                };
+                
+                await courseRef.update({ materials: materials });
+                
+                alert('Material updated successfully!');
+                
+                // Reload data
+                await loadAllData();
+                
+                if (currentType === courseData.type && currentLevel === courseData.level && coursesPage.style.display === 'block') {
+                    loadCourses(currentType, currentLevel);
+                }
+                
+                loadAdminContent();
+                
+            } catch (error) {
+                console.error('Error editing material:', error);
+                alert('Error editing material. Please try again.');
+            }
+        };
+
         window.deleteMaterial = async function(courseId, materialIndex) {
             if (!currentUser) {
                 alert('Please log in first');
