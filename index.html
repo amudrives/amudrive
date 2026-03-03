@@ -2505,6 +2505,20 @@
                 <i class="fas fa-external-link-alt"></i>
             </a>
 
+            <!-- Notice & Update Section (NEW) -->
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-bullhorn"></i>
+                    Notice & Update
+                </h3>
+                <ul class="notices-list" id="panel-notices-list" style="max-height: 300px; overflow-y: auto;">
+                    <!-- Latest 5 notices will be loaded here dynamically -->
+                </ul>
+                <a href="#" class="view-all" id="panel-view-all-notices">
+                    <i class="fas fa-arrow-right"></i> View All Notices
+                </a>
+            </div>
+
             <!-- Social Channels Section -->
             <div class="social-channels-section">
                 <h3 class="section-title">
@@ -2755,10 +2769,12 @@
         const coursesList = document.getElementById('courses-list');
         const noticesList = document.getElementById('notices-list');
         const allNoticesList = document.getElementById('all-notices-list');
+        const panelNoticesList = document.getElementById('panel-notices-list');
         const levelTabs = document.querySelectorAll('.level-tab');
         const importantDownloadsLink = document.getElementById('important-downloads-link');
         const ourTeamLink = document.getElementById('our-team-link');
         const viewMoreNoticesBtn = document.getElementById('view-more-notices');
+        const panelViewAllNotices = document.getElementById('panel-view-all-notices');
         const loginModal = document.getElementById('login-modal');
         const adminLoginLink = document.getElementById('admin-login-link');
         const adminPanelLink = document.getElementById('admin-panel-link');
@@ -2924,6 +2940,12 @@
             logoutLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 logout();
+            });
+            
+            // Panel view all notices click
+            panelViewAllNotices.addEventListener('click', function(e) {
+                e.preventDefault();
+                showAllNotices();
             });
         });
 
@@ -3295,16 +3317,23 @@
 
         // ========== NOTICES DISPLAY ==========
         function loadNotices() {
+            // Main page notices
             noticesList.innerHTML = '';
             
+            // Panel notices
+            panelNoticesList.innerHTML = '';
+            
             if (!window.notices || window.notices.length === 0) {
-                noticesList.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">No notices available yet.</p>';
+                const emptyMessage = '<p style="text-align: center; padding: 20px; color: #666;">No notices available yet.</p>';
+                noticesList.innerHTML = emptyMessage;
+                panelNoticesList.innerHTML = emptyMessage;
                 return;
             }
             
             const latestNotices = window.notices.slice(0, 5);
             
             latestNotices.forEach(notice => {
+                // Main page notice
                 const li = document.createElement('li');
                 li.innerHTML = `
                     ${getNoticeBadge(notice.priority)}
@@ -3317,6 +3346,26 @@
                 });
                 
                 noticesList.appendChild(li);
+                
+                // Panel notice
+                const panelLi = document.createElement('li');
+                panelLi.style.padding = '10px 0';
+                panelLi.style.borderBottom = '1px solid var(--border-color)';
+                panelLi.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 8px;">
+                        ${getNoticeBadge(notice.priority)}
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; font-size: 13px;">${notice.title}</div>
+                            <div style="font-size: 11px; color: #666;">${notice.date}</div>
+                        </div>
+                    </div>
+                `;
+                
+                panelLi.addEventListener('click', function() {
+                    showNoticeDetails(notice);
+                });
+                
+                panelNoticesList.appendChild(panelLi);
             });
         }
 
