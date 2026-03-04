@@ -34,10 +34,6 @@
             --radius: 8px;
             --transition: all 0.3s ease;
             --heading-red: #b22222;
-            --open-btn: #28a745;
-            --open-btn-hover: #218838;
-            --download-btn: #b22222;
-            --download-btn-hover: #8b1a1a;
         }
 
         .dark-mode {
@@ -51,10 +47,6 @@
             --hover-color: #2d2d2d;
             --shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
             --heading-red: #ff6b6b;
-            --open-btn: #2e7d32;
-            --open-btn-hover: #1b5e20;
-            --download-btn: #b71c1c;
-            --download-btn-hover: #8b0000;
         }
 
         body {
@@ -882,7 +874,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
         
         .materials-list li:last-child {
@@ -898,36 +889,9 @@
         .materials-list a:hover {
             text-decoration: underline;
         }
-
-        .materials-list li span.material-title {
-            color: var(--text-color);
-            cursor: pointer;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        
-        .materials-list li span.material-title:hover {
-            color: var(--primary-color);
-        }
-        
-        .open-btn {
-            background-color: var(--open-btn);
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-left: 8px;
-        }
-        
-        .open-btn:hover {
-            background-color: var(--open-btn-hover);
-        }
         
         .download-btn {
-            background-color: var(--download-btn);
+            background-color: #002147;
             color: white;
             border: none;
             padding: 5px 12px;
@@ -935,18 +899,10 @@
             font-size: 12px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-left: 8px;
         }
         
         .download-btn:hover {
-            background-color: var(--download-btn-hover);
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-            flex-wrap: wrap;
+            background-color: #004080;
         }
         
         /* ========== STUDENT SERVICES PAGE ========== */
@@ -1725,14 +1681,6 @@
             color: var(--primary-color);
         }
         
-        .dark-mode .materials-list li span.material-title {
-            color: var(--text-color);
-        }
-        
-        .dark-mode .materials-list li span.material-title:hover {
-            color: var(--primary-color);
-        }
-        
         .dark-mode .form-group label {
             color: var(--text-color);
         }
@@ -2269,13 +2217,8 @@
                         <input type="text" id="material-title" placeholder="e.g., 2023 Question Paper, Organic Chemistry Notes">
                     </div>
                     <div class="form-group">
-                        <label for="material-link">PDF Link/URL (Open Button)</label>
+                        <label for="material-link">PDF Link/URL</label>
                         <input type="text" id="material-link" placeholder="https://drive.google.com/... or direct PDF link">
-                    </div>
-                    <div class="form-group">
-                        <label for="material-download-link">Download URL (Download Button) - Optional</label>
-                        <input type="text" id="material-download-link" placeholder="https://drive.google.com/... direct download link">
-                        <small>If left blank, Download button will use the same as Open button</small>
                     </div>
                     <button class="btn" id="submit-material">Submit Material</button>
                 </div>
@@ -2290,16 +2233,6 @@
                             <option value="qp">Question Papers</option>
                             <option value="sm">Study Materials</option>
                             <option value="sem">Semester Question Paper</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="filter-level">Filter by Level</label>
-                        <select id="filter-level">
-                            <option value="all">All Levels</option>
-                            <option value="school">Schools/Diploma</option>
-                            <option value="ug">Undergraduate (UG)</option>
-                            <option value="pg">Postgraduate (PG)</option>
-                            <option value="phd">Ph.D.</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -2914,7 +2847,6 @@
         const selectCourseDropdown = document.getElementById('select-course');
         const filterCourseDropdown = document.getElementById('filter-course');
         const filterCategoryDropdown = document.getElementById('filter-category');
-        const filterLevelDropdown = document.getElementById('filter-level');
         const newCourseCategory = document.getElementById('new-course-category');
         const materialCategory = document.getElementById('material-category');
         
@@ -3170,15 +3102,6 @@
             }
         }
 
-        // ========== EXTRACT NUMBER FROM TITLE FOR SORTING ==========
-        function extractNumber(title) {
-            const matches = title.match(/\d{4}/g);
-            if (matches && matches.length > 0) {
-                return Math.max(...matches.map(Number));
-            }
-            return 0;
-        }
-
         // ========== LOAD ALL DATA FROM FIRESTORE ==========
         async function loadAllData() {
             try {
@@ -3215,17 +3138,6 @@
                         }
                     }
                 });
-
-                // Sort courses alphabetically A-Z ignoring special characters
-                for (let type in coursesData) {
-                    for (let level in coursesData[type]) {
-                        coursesData[type][level].sort((a, b) => {
-                            const nameA = a.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                            const nameB = b.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                            return nameA.localeCompare(nameB);
-                        });
-                    }
-                }
 
                 // Load notices
                 const noticesSnapshot = await db.collection('notices').orderBy('date', 'desc').get();
@@ -3540,21 +3452,14 @@
             
             const courses = coursesData[type] && coursesData[type][level] ? [...coursesData[type][level]] : [];
             
-            // Courses already sorted alphabetically from loadAllData
-            
             let filteredCourses = courses;
             if (searchTerm) {
-                const searchTermClean = searchTerm.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                filteredCourses = courses.filter(course => {
-                    const courseNameClean = course.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                    if (courseNameClean.includes(searchTermClean)) return true;
-                    
-                    // Check materials
-                    return course.materials.some(material => {
-                        const materialTitleClean = material.title.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                        return materialTitleClean.includes(searchTermClean);
-                    });
-                });
+                filteredCourses = courses.filter(course => 
+                    course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    course.materials.some(material => 
+                        material.title.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                );
             }
             
             if (filteredCourses.length === 0) {
@@ -3566,37 +3471,25 @@
                 const courseBox = document.createElement('div');
                 courseBox.className = 'course-box';
                 
-                // Sort materials by year (largest first) for year-based titles
-                const sortedMaterials = [...(course.materials || [])].sort((a, b) => {
-                    const numA = extractNumber(a.title);
-                    const numB = extractNumber(b.title);
-                    return numB - numA; // Descending (largest first)
-                });
-                
                 let materialsHTML = '';
                 
-                if (sortedMaterials.length > 0) {
-                    sortedMaterials.forEach(material => {
+                if (course.materials && course.materials.length > 0) {
+                    course.materials.forEach(material => {
                         const safeLink = material.link.replace(/'/g, "\\'");
                         const safeTitle = material.title.replace(/'/g, "\\'");
-                        const downloadLink = material.downloadLink || material.link;
-                        const safeDownloadLink = downloadLink.replace(/'/g, "\\'");
                         
                         materialsHTML += `
                             <li>
                                 <div>
-                                    <span class="material-title" onclick="openAnyLink('${safeLink}')">
+                                    <span style="cursor: pointer; color: #002147; font-weight: 500;" 
+                                          onclick="openAnyLink('${safeLink}')">
                                         📄 ${material.title}
                                     </span>
                                 </div>
-                                <div class="button-group">
-                                    <button class="open-btn" onclick="openAnyLink('${safeLink}')">
-                                        Open
-                                    </button>
-                                    <button class="download-btn" onclick="openAnyLink('${safeDownloadLink}')">
-                                        Download
-                                    </button>
-                                </div>
+                                <button class="download-btn" 
+                                        onclick="openAnyLink('${safeLink}')">
+                                    Open
+                                </button>
                             </li>
                         `;
                     });
@@ -4066,24 +3959,12 @@
                 const courseName = document.getElementById('select-course').value;
                 const title = document.getElementById('material-title').value;
                 const link = document.getElementById('material-link').value;
-                const downloadLink = document.getElementById('material-download-link').value || link;
                 
                 if (!courseName || !title || !link) {
                     alert('Please fill in all fields');
                     return;
                 }
-                // Add Material Category/Level change - refresh dropdown
-materialCategory.addEventListener('change', function() {
-    if (addMaterialForm.style.display === 'block') {
-        loadCourseDropdowns();
-    }
-});
-
-materialLevel.addEventListener('change', function() {
-    if (addMaterialForm.style.display === 'block') {
-        loadCourseDropdowns();
-    }
-});
+                
                 try {
                     // Find the course document
                     const coursesSnapshot = await db.collection('courses')
@@ -4104,7 +3985,6 @@ materialLevel.addEventListener('change', function() {
                     materials.push({
                         title: title,
                         link: link,
-                        downloadLink: downloadLink,
                         addedAt: new Date().toISOString()
                     });
                     
@@ -4114,7 +3994,6 @@ materialLevel.addEventListener('change', function() {
                     
                     document.getElementById('material-title').value = '';
                     document.getElementById('material-link').value = '';
-                    document.getElementById('material-download-link').value = '';
                     
                     alert('Material added successfully!');
                     
@@ -4417,10 +4296,6 @@ materialLevel.addEventListener('change', function() {
                 loadAdminContent();
             });
             
-            filterLevelDropdown.addEventListener('change', function() {
-                loadAdminContent();
-            });
-            
             filterCourseDropdown.addEventListener('change', function() {
                 loadAdminContent();
             });
@@ -4600,80 +4475,31 @@ materialLevel.addEventListener('change', function() {
             });
         }
 
-        // ========== LOAD COURSE DROPDOWNS WITH FILTER ==========
-async function loadCourseDropdowns() {
-    const category = document.getElementById('material-category').value;
-    const level = document.getElementById('material-level').value;
-    
-    selectCourseDropdown.innerHTML = '<option value="">-- Select Course --</option>';
-    filterCourseDropdown.innerHTML = '<option value="all">All Courses</option>';
-    
-    try {
-        let query = db.collection('courses');
-        
-        // Filter by category
-        if (category && category !== 'all') {
-            query = query.where('type', '==', category);
-        }
-        
-        // Filter by level
-        if (level && level !== 'all') {
-            query = query.where('level', '==', level);
-        }
-        
-        const coursesSnapshot = await query.get();
-        
-        if (coursesSnapshot.empty) {
-            const option1 = document.createElement('option');
-            option1.value = '';
-            option1.textContent = '-- No courses found --';
-            option1.disabled = true;
-            selectCourseDropdown.appendChild(option1);
+        // ========== ADMIN FUNCTIONS ==========
+        async function loadCourseDropdowns() {
+            selectCourseDropdown.innerHTML = '<option value="">-- Select Course --</option>';
+            filterCourseDropdown.innerHTML = '<option value="all">All Courses</option>';
             
-            const option2 = document.createElement('option');
-            option2.value = 'all';
-            option2.textContent = 'All Courses (No courses)';
-            filterCourseDropdown.appendChild(option2);
-            return;
-        }
-        
-        // Sort courses alphabetically
-        const courses = [];
-        coursesSnapshot.forEach(doc => {
-            courses.push({ id: doc.id, ...doc.data() });
-        });
-        
-        courses.sort((a, b) => {
-            const nameA = (a.code + ' ' + a.name).toLowerCase();
-            const nameB = (b.code + ' ' + b.name).toLowerCase();
-            return nameA.localeCompare(nameB);
-        });
-        
-        courses.forEach(course => {
-            // For Add Material dropdown
-            const option1 = document.createElement('option');
-            option1.value = course.name;
-            option1.textContent = `${course.code} - ${course.name}`;
-            selectCourseDropdown.appendChild(option1);
+            const coursesSnapshot = await db.collection('courses').get();
             
-            // For Filter dropdown
-            const option2 = document.createElement('option');
-            option2.value = course.name;
-            option2.textContent = `${course.code} - ${course.name}`;
-            filterCourseDropdown.appendChild(option2);
-        });
-        
-    } catch (error) {
-        console.error('Error loading courses:', error);
-        selectCourseDropdown.innerHTML = '<option value="">-- Error loading courses --</option>';
-    }
-}
+            coursesSnapshot.forEach(doc => {
+                const course = doc.data();
+                const option1 = document.createElement('option');
+                option1.value = course.name;
+                option1.textContent = `${course.code} - ${course.name}`;
+                selectCourseDropdown.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = course.name;
+                option2.textContent = `${course.code} - ${course.name}`;
+                filterCourseDropdown.appendChild(option2);
+            });
+        }
 
         async function loadAdminContent() {
             contentList.innerHTML = '';
             
             const selectedCategory = filterCategoryDropdown.value;
-            const selectedLevel = filterLevelDropdown ? filterLevelDropdown.value : 'all';
             const selectedCourse = filterCourseDropdown.value;
             
             let query = db.collection('courses');
@@ -4682,8 +4508,8 @@ async function loadCourseDropdowns() {
                 query = query.where('type', '==', selectedCategory);
             }
             
-            if (selectedLevel !== 'all') {
-                query = query.where('level', '==', selectedLevel);
+            if (selectedCourse !== 'all') {
+                query = query.where('name', '==', selectedCourse);
             }
             
             try {
@@ -4694,28 +4520,14 @@ async function loadCourseDropdowns() {
                     return;
                 }
                 
-                // Filter by course if needed
-                let courses = [];
                 coursesSnapshot.forEach(doc => {
                     const course = doc.data();
-                    if (selectedCourse === 'all' || course.name === selectedCourse) {
-                        courses.push({ id: doc.id, ...course });
-                    }
-                });
-                
-                if (courses.length === 0) {
-                    contentList.innerHTML = '<p>No content found for selected filters.</p>';
-                    return;
-                }
-                
-                courses.forEach(course => {
                     const courseDiv = document.createElement('div');
                     courseDiv.className = 'course-item';
                     courseDiv.innerHTML = `
                         <div class="course-header-admin">
                             <h3>${course.name}</h3>
                             <span style="font-size: 12px; background-color: #d4edda; color: #155724; padding: 3px 8px; border-radius: 3px;">${course.type}</span>
-                            <span style="font-size: 12px; background-color: #cce5ff; color: #004085; padding: 3px 8px; border-radius: 3px; margin-left: 5px;">${course.level}</span>
                         </div>
                     `;
                     
@@ -4730,13 +4542,12 @@ async function loadCourseDropdowns() {
                             materialDiv.style.backgroundColor = index % 2 === 0 ? '#fff' : '#f9f9f9';
                             materialDiv.innerHTML = `
                                 <p><strong>${material.title}</strong></p>
-                                <p><strong>Open Link:</strong> <span onclick="openAnyLink('${material.link.replace(/'/g, "\\'")}')" style="color: #28a745; cursor: pointer; text-decoration: underline;">${material.link.substring(0, 50)}...</span></p>
-                                <p><strong>Download URL:</strong> <span onclick="openAnyLink('${(material.downloadLink || material.link).replace(/'/g, "\\'")}')" style="color: #b22222; cursor: pointer; text-decoration: underline;">${(material.downloadLink || material.link).substring(0, 50)}...</span></p>
+                                <p><strong>Link:</strong> <span onclick="openAnyLink('${material.link.replace(/'/g, "\\'")}')" style="color: #002147; cursor: pointer; text-decoration: underline;">${material.link.substring(0, 50)}...</span></p>
                                 <div style="display: flex; gap: 10px;">
-                                    <button class="btn btn-warning" onclick="editMaterial('${course.id}', ${index})" style="margin-top: 5px; padding: 5px 10px; font-size: 14px;">
+                                    <button class="btn btn-warning" onclick="editMaterial('${doc.id}', ${index})" style="margin-top: 5px; padding: 5px 10px; font-size: 14px;">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
-                                    <button class="btn btn-danger" onclick="deleteMaterial('${course.id}', ${index})" style="margin-top: 5px; padding: 5px 10px; font-size: 14px;">
+                                    <button class="btn btn-danger" onclick="deleteMaterial('${doc.id}', ${index})" style="margin-top: 5px; padding: 5px 10px; font-size: 14px;">
                                         <i class="fas fa-trash"></i> Delete
                                     </button>
                                 </div>
@@ -4956,14 +4767,11 @@ async function loadCourseDropdowns() {
                 const newTitle = prompt('Enter new title for the material:', material.title);
                 if (newTitle === null) return; // Cancel
                 
-                const newLink = prompt('Enter new Open link (PDF) for the material:', material.link);
+                const newLink = prompt('Enter new link for the material:', material.link);
                 if (newLink === null) return; // Cancel
                 
-                const newDownloadLink = prompt('Enter new Download URL (leave blank to use Open link):', material.downloadLink || material.link);
-                if (newDownloadLink === null) return; // Cancel
-                
                 if (!newTitle.trim() || !newLink.trim()) {
-                    alert('Title and Open Link cannot be empty');
+                    alert('Title and Link cannot be empty');
                     return;
                 }
                 
@@ -4971,8 +4779,7 @@ async function loadCourseDropdowns() {
                 materials[materialIndex] = {
                     ...material,
                     title: newTitle.trim(),
-                    link: newLink.trim(),
-                    downloadLink: newDownloadLink.trim() || newLink.trim()
+                    link: newLink.trim()
                 };
                 
                 await courseRef.update({ materials: materials });
