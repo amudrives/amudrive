@@ -4405,11 +4405,13 @@
             });
             
             filterCategoryDropdown.addEventListener('change', function() {
-                loadAdminContent();
+              loadFilterCourses();
+              loadAdminContent();
             });
             
             filterLevelDropdown.addEventListener('change', function() {
-                loadAdminContent();
+              loadFilterCourses();
+              loadAdminContent();
             });
             
             filterCourseDropdown.addEventListener('change', function() {
@@ -4487,6 +4489,7 @@
                         
                         // Reload data
                         await loadAllData();
+                        loadFilterCourses();
                         
                     } catch (error) {
                         console.error('Error deleting course:', error);
@@ -4614,7 +4617,35 @@ async function loadCourseDropdowns() {
         selectCourseDropdown.appendChild(option);
     });
 }
+async function loadFilterCourses() {
 
+    filterCourseDropdown.innerHTML = '<option value="all">All Courses</option>';
+
+    const category = filterCategoryDropdown.value;
+    const level = filterLevelDropdown.value;
+
+    let query = db.collection('courses');
+
+    if (category !== 'all') {
+        query = query.where('type', '==', category);
+    }
+
+    if (level !== 'all') {
+        query = query.where('level', '==', level);
+    }
+
+    const snapshot = await query.get();
+
+    snapshot.forEach(doc => {
+        const course = doc.data();
+
+        const option = document.createElement("option");
+        option.value = course.name;
+        option.textContent = `${course.code} - ${course.name}`;
+
+        filterCourseDropdown.appendChild(option);
+    });
+}
         async function loadAdminContent() {
             contentList.innerHTML = '';
             
